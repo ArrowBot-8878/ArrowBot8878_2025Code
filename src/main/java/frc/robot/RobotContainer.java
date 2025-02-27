@@ -1,7 +1,3 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
-
 package frc.robot;
 
 import edu.wpi.first.math.MathUtil;
@@ -20,14 +16,25 @@ import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.Constants.OperatorConstants;
-import frc.robot.Constants.RollerConstants;
-import frc.robot.Commands.RollerCommand;
-import frc.robot.subsystems.CANRollerSubsystem;
+import frc.robot.Commands.AlgaeCommands.AlgaeIntakeBiDirectionalCommand;
+import frc.robot.Commands.AlgaeCommands.AlgaeWristClosedLoopCommand;
+import frc.robot.Commands.AlgaeCommands.AlgaeWristOpenLoopCommand;
+import frc.robot.Commands.ClimbCommands.ClimbBiDirectionalCommand;
+import frc.robot.Commands.CoralCommands.CoralArmClosedLoopCommand;
+import frc.robot.Commands.CoralCommands.CoralArmOpenLoopCommand;
+import frc.robot.Commands.CoralCommands.CoralInsertBiDirectionalCommand;
+import frc.robot.Commands.CoralCommands.CoralWristClosedLoopCommand;
+import frc.robot.Commands.CoralCommands.CoralWristOpenLoopCommand;
+import frc.robot.subsystems.AlgaeIntakeSubsystem;
+import frc.robot.subsystems.AlgaeWristSubsystem;
+import frc.robot.subsystems.ClimbSubsystem;
+import frc.robot.subsystems.CoralArmSubsystem;
+import frc.robot.subsystems.CoralInsertMechanism;
+import frc.robot.subsystems.CoralWristSubsystem;
 import frc.robot.subsystems.DriveSubsystemOld;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
-import edu.wpi.first.wpilibj2.command.Subsystem;
-import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -46,28 +53,29 @@ import com.pathplanner.lib.auto.NamedCommands;
 public class RobotContainer {
   // The robot's subsystems
   private final DriveSubsystemOld m_robotDrive = new DriveSubsystemOld();
-  private final CANRollerSubsystem rollerSubsystem = new CANRollerSubsystem();
+  private final CoralWristSubsystem m_coralWristSubsystem = new CoralWristSubsystem();
+  private final CoralArmSubsystem m_coralArmSubsystem = new CoralArmSubsystem();
+  private final CoralInsertMechanism m_coralInsertMechanism = new CoralInsertMechanism();
+  private final AlgaeWristSubsystem m_algaeWristSubsystem = new AlgaeWristSubsystem();
+  private final AlgaeIntakeSubsystem m_algaeIntakeSubsystem = new AlgaeIntakeSubsystem();
+  private final ClimbSubsystem m_climbSubsystem = new ClimbSubsystem();
+  
   SendableChooser<Command> autonChooser = new SendableChooser<Command>();
 
   // The driver's controller
   XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
-    private final CommandXboxController operatorController = new CommandXboxController(
+  private final CommandXboxController operatorController = new CommandXboxController(
       OperatorConstants.OPERATOR_CONTROLLER_PORT);
+    private final CommandXboxController backUpOperator = new CommandXboxController(
+      OperatorConstants.BACK_UP_OPERATOR_CONTROLLER_PORT);
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
     // Configure the button bindings
-
-
-    NamedCommands.registerCommand("RunIntake", new RollerCommand(()-> 0.5, ()-> 0, rollerSubsystem));
     autonChooser.setDefaultOption("DefaultAuto", AutoBuilder.buildAuto("New Auto"));
-
     
-
-
-
     configureButtonBindings();
 
     // Configure default commands
@@ -81,6 +89,30 @@ public class RobotContainer {
                 -MathUtil.applyDeadband(m_driverController.getRightX(), OIConstants.kDriveDeadband),
                 true),
             m_robotDrive));
+    
+     // Default command for Coral Wrist control with operator right stick
+     m_coralWristSubsystem.setDefaultCommand(
+      new CoralWristOpenLoopCommand(
+          m_coralWristSubsystem,
+          () -> -MathUtil.applyDeadband(operatorController.getRightY(), 0.1) * 0.5
+      )
+  );
+  
+  // Default command for Coral Arm with operator left stick
+  m_coralArmSubsystem.setDefaultCommand(
+      new CoralArmOpenLoopCommand(
+          m_coralArmSubsystem,
+          () -> -MathUtil.applyDeadband(operatorController.getLeftY(), 0.1) * 0.5
+      )
+  );
+  
+  // Default command for Algae Wrist with backup operator right stick
+  m_algaeWristSubsystem.setDefaultCommand(
+      new AlgaeWristOpenLoopCommand(
+          m_algaeWristSubsystem,
+          () -> -MathUtil.applyDeadband(backUpOperator.getRightY(), 0.1) * 0.5
+      )
+  );
   }
 
   /**
@@ -93,15 +125,81 @@ public class RobotContainer {
    * {@link JoystickButton}.
    */
   private void configureButtonBindings() {
+    // Keep existing button bindings
     new JoystickButton(m_driverController, Button.kR1.value)
         .whileTrue(new RunCommand(
             () -> m_robotDrive.setX(),
             m_robotDrive));
-
-
-    new Trigger(() -> operatorController.getRightTriggerAxis() > 0.1)
-        .whileTrue(new RollerCommand(() -> RollerConstants.ROLLER_EJECT_VALUE, () -> 0, rollerSubsystem));
-        //(new RollerCommand(() -> RollerConstants.ROLLER_EJECT_VALUE, () -> 0, rollerSubsystem));
+            
+    // CORAL CONTROLS (OPERATOR CONTROLLER)
+    
+    // Coral Insert Mechanism Control
+    operatorController.a().whileTrue(
+        new CoralInsertBiDirectionalCommand(m_coralInsertMechanism, 0.5)
+    );
+    
+    operatorController.b().whileTrue(
+        new CoralInsertBiDirectionalCommand(m_coralInsertMechanism, -0.5)
+    );
+    
+    // Manual override for Coral Wrist
+    operatorController.leftBumper().whileTrue(
+        new CoralWristOpenLoopCommand(m_coralWristSubsystem, () -> 0.3)
+    );
+    
+    operatorController.rightBumper().whileTrue(
+        new CoralWristOpenLoopCommand(m_coralWristSubsystem, () -> -0.3)
+    );
+    
+    // Manual override for Coral Arm
+    operatorController.povUp().whileTrue(
+        new CoralArmOpenLoopCommand(m_coralArmSubsystem, () -> 0.3)
+    );
+    
+    operatorController.povDown().whileTrue(
+        new CoralArmOpenLoopCommand(m_coralArmSubsystem, () -> -0.3)
+    );
+    
+    // ALGAE CONTROLS (BACKUP OPERATOR CONTROLLER)
+    
+    // Algae Intake Control
+    backUpOperator.leftTrigger(0.1).whileTrue(
+        new AlgaeIntakeBiDirectionalCommand(
+            m_algaeIntakeSubsystem,
+            () -> backUpOperator.getLeftTriggerAxis()
+        )
+    );
+    
+    backUpOperator.rightTrigger(0.1).whileTrue(
+        new AlgaeIntakeBiDirectionalCommand(
+            m_algaeIntakeSubsystem,
+            () -> -backUpOperator.getRightTriggerAxis()
+        )
+    );
+    
+    // Manual override for Algae Wrist
+    backUpOperator.leftBumper().whileTrue(
+        new AlgaeWristOpenLoopCommand(m_algaeWristSubsystem, () -> 0.3)
+    );
+    
+    backUpOperator.rightBumper().whileTrue(
+        new AlgaeWristOpenLoopCommand(m_algaeWristSubsystem, () -> -0.3)
+    );
+    
+    // CLIMB CONTROLS (DRIVER CONTROLLER)
+    
+    // Climb Control with driver triggers
+    new Trigger(() -> Math.abs(m_driverController.getRightTriggerAxis()) > 0.1)
+        .whileTrue(new ClimbBiDirectionalCommand(
+            m_climbSubsystem,
+            () -> m_driverController.getRightTriggerAxis() * 0.7 // Scale to 70% max speed
+        ));
+    
+    new Trigger(() -> Math.abs(m_driverController.getLeftTriggerAxis()) > 0.1)
+        .whileTrue(new ClimbBiDirectionalCommand(
+            m_climbSubsystem,
+            () -> -m_driverController.getLeftTriggerAxis() * 0.7 // Scale to 70% max speed
+        ));
   }
 
   /**
@@ -110,43 +208,6 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    // Create config for trajectory
-    TrajectoryConfig config = new TrajectoryConfig(
-        AutoConstants.kMaxSpeedMetersPerSecond,
-        AutoConstants.kMaxAccelerationMetersPerSecondSquared)
-        // Add kinematics to ensure max speed is actually obeyed
-        .setKinematics(DriveConstants.kDriveKinematics);
-
-    // An example trajectory to follow. All units in meters.
-    Trajectory exampleTrajectory = TrajectoryGenerator.generateTrajectory(
-        // Start at the origin facing the +X direction
-        new Pose2d(0, 0, new Rotation2d(0)),
-        // Pass through these two interior waypoints, making an 's' curve path
-        List.of(new Translation2d(1, 1), new Translation2d(2, -1)),
-        // End 3 meters straight ahead of where we started, facing forward
-        new Pose2d(3, 0, new Rotation2d(0)),
-        config);
-
-    var thetaController = new ProfiledPIDController(
-        AutoConstants.kPThetaController, 0, 0, AutoConstants.kThetaControllerConstraints);
-    thetaController.enableContinuousInput(-Math.PI, Math.PI);
-
-    SwerveControllerCommand swerveControllerCommand = new SwerveControllerCommand(
-        exampleTrajectory,
-        m_robotDrive::getPose, // Functional interface to feed supplier
-        DriveConstants.kDriveKinematics,
-
-        // Position controllers
-        new PIDController(AutoConstants.kPXController, 0, 0),
-        new PIDController(AutoConstants.kPYController, 0, 0),
-        thetaController,
-        m_robotDrive::setModuleStates,
-        m_robotDrive);
-
-    // Reset odometry to the starting pose of the trajectory.
-    m_robotDrive.resetOdometry(exampleTrajectory.getInitialPose());
-
-    // Run path following command, then stop at the end.
-    return swerveControllerCommand.andThen(() -> m_robotDrive.drive(0, 0, 0, false));
+    return new PrintCommand("This is a little non functioning auto. Yipee!");
   }
 }

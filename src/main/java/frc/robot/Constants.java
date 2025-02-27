@@ -107,15 +107,71 @@ public final class Constants {
 
 
 
-  public static final class RollerConstants {
-    public static final int ROLLER_MOTOR_ID = 5;
-    public static final int ROLLER_MOTOR_CURRENT_LIMIT = 60;
-    public static final double ROLLER_MOTOR_VOLTAGE_COMP = 10;
-    public static final double ROLLER_EJECT_VALUE = 0.44;
-  }
+
 
   public static final class OperatorConstants {
     public static final int DRIVER_CONTROLLER_PORT = 0;
     public static final int OPERATOR_CONTROLLER_PORT = 1;
+    public static final int BACK_UP_OPERATOR_CONTROLLER_PORT = 2;
   }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  public static final class CoralInsertMechanismConstants {
+    public static final int kCoralInsertMotorCanId = 20;
+  }
+
+
+  public static final class CoralWristConstants {
+    public static final int kCoraWristMotorCanId = 21;
+    public static final double kP = 0.1;
+    public static final double kI = 0.0;
+    public static final double kD = 0.0;
+
+    public static final double FORBIDDEN_ZONE_START = 150.0;
+    public static final double FORBIDDEN_ZONE_END = 250.0;
+  }
+
+
+
+  public static final class CoralArmConstants {
+    public static final int kCoralArmMotorCanId = 22;
+    public static final double kP = 0.1;
+    public static final double kI = 0.0;
+    public static final double kD = 0.0;
+    public static final double FORBIDDEN_ZONE_START = 150.0;
+    public static final double FORBIDDEN_ZONE_END = 250.0;
+  }
+
+
+  public static final class AlgaeWristConstants {
+    public static final int kAlgaeWristMotorCanId = 30;
+    public static final double kP = 0.1;
+    public static final double kI = 0.0;
+    public static final double kD = 0.0;
+    public static final double FORBIDDEN_ZONE_START = 5.0;
+    public static final double FORBIDDEN_ZONE_END = 250.0;
+  }
+
+  public static final class AlgaeIntakeConstants {
+    public static final int kAlgaeIntakeMotorCanId = 31;
+  }
+
+
+  public static final class ClimbConstants {
+    public static final int kClimbMotorCanId = 40;
+  }
+
+
 }
