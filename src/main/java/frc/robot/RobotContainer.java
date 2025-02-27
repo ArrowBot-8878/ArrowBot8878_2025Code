@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.PS4Controller.Button;
 import frc.robot.Constants.AutoConstants;
+import frc.robot.Constants.CoralInsertMechanismConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.Constants.OperatorConstants;
@@ -135,30 +136,30 @@ public class RobotContainer {
     
     // Coral Insert Mechanism Control
     operatorController.a().whileTrue(
-        new CoralInsertBiDirectionalCommand(m_coralInsertMechanism, 0.5)
+        new CoralInsertBiDirectionalCommand(m_coralInsertMechanism, CoralInsertMechanismConstants.kInsertSpeed)
     );
     
     operatorController.b().whileTrue(
-        new CoralInsertBiDirectionalCommand(m_coralInsertMechanism, -0.5)
+        new CoralInsertBiDirectionalCommand(m_coralInsertMechanism, CoralInsertMechanismConstants.kEjectSpeed)
     );
     
-    // Manual override for Coral Wrist
-    operatorController.leftBumper().whileTrue(
-        new CoralWristOpenLoopCommand(m_coralWristSubsystem, () -> 0.3)
-    );
+    // // Manual override for Coral Wrist
+    // operatorController.leftBumper().whileTrue(
+    //     new CoralWristOpenLoopCommand(m_coralWristSubsystem, () -> 0.3)
+    // );
     
-    operatorController.rightBumper().whileTrue(
-        new CoralWristOpenLoopCommand(m_coralWristSubsystem, () -> -0.3)
-    );
+    // operatorController.rightBumper().whileTrue(
+    //     new CoralWristOpenLoopCommand(m_coralWristSubsystem, () -> -0.3)
+    // );
     
-    // Manual override for Coral Arm
-    operatorController.povUp().whileTrue(
-        new CoralArmOpenLoopCommand(m_coralArmSubsystem, () -> 0.3)
-    );
+    // // Manual override for Coral Arm
+    // operatorController.povUp().whileTrue(
+    //     new CoralArmOpenLoopCommand(m_coralArmSubsystem, () -> 0.3)
+    // );
     
-    operatorController.povDown().whileTrue(
-        new CoralArmOpenLoopCommand(m_coralArmSubsystem, () -> -0.3)
-    );
+    // operatorController.povDown().whileTrue(
+    //     new CoralArmOpenLoopCommand(m_coralArmSubsystem, () -> -0.3)
+    // );
     
     // ALGAE CONTROLS (BACKUP OPERATOR CONTROLLER)
     
@@ -177,14 +178,14 @@ public class RobotContainer {
         )
     );
     
-    // Manual override for Algae Wrist
-    backUpOperator.leftBumper().whileTrue(
-        new AlgaeWristOpenLoopCommand(m_algaeWristSubsystem, () -> 0.3)
-    );
+    // // Manual override for Algae Wrist
+    // backUpOperator.leftBumper().whileTrue(
+    //     new AlgaeWristOpenLoopCommand(m_algaeWristSubsystem, () -> 0.3)
+    // );
     
-    backUpOperator.rightBumper().whileTrue(
-        new AlgaeWristOpenLoopCommand(m_algaeWristSubsystem, () -> -0.3)
-    );
+    // backUpOperator.rightBumper().whileTrue(
+    //     new AlgaeWristOpenLoopCommand(m_algaeWristSubsystem, () -> -0.3)
+    // );
     
     // CLIMB CONTROLS (DRIVER CONTROLLER)
     

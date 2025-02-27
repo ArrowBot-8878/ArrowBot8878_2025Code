@@ -130,6 +130,8 @@ public final class Constants {
 
   public static final class CoralInsertMechanismConstants {
     public static final int kCoralInsertMotorCanId = 20;
+    public static final double kInsertSpeed = 0.5;
+    public static final double kEjectSpeed = -0.5;
     public static final boolean isInverted = false;
   }
 
