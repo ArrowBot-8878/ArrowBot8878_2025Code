@@ -130,15 +130,16 @@ public final class Constants {
 
   public static final class CoralInsertMechanismConstants {
     public static final int kCoralInsertMotorCanId = 20;
+    public static final boolean isInverted = false;
   }
 
 
   public static final class CoralWristConstants {
     public static final int kCoraWristMotorCanId = 21;
+    public static final boolean isInverted = false;
     public static final double kP = 0.1;
     public static final double kI = 0.0;
     public static final double kD = 0.0;
-
     public static final double FORBIDDEN_ZONE_START = 150.0;
     public static final double FORBIDDEN_ZONE_END = 250.0;
   }
@@ -147,6 +148,7 @@ public final class Constants {
 
   public static final class CoralArmConstants {
     public static final int kCoralArmMotorCanId = 22;
+    public static final boolean isInverted = false;
     public static final double kP = 0.1;
     public static final double kI = 0.0;
     public static final double kD = 0.0;
@@ -157,6 +159,7 @@ public final class Constants {
 
   public static final class AlgaeWristConstants {
     public static final int kAlgaeWristMotorCanId = 30;
+    public static final boolean isInverted = false;
     public static final double kP = 0.1;
     public static final double kI = 0.0;
     public static final double kD = 0.0;
@@ -165,12 +168,17 @@ public final class Constants {
   }
 
   public static final class AlgaeIntakeConstants {
-    public static final int kAlgaeIntakeMotorCanId = 31;
+    public static final int kLeftIntakeMotorCanId = 31;
+    public static final int kRightIntakeMotorCanId = 32;
+    public static final boolean kLeftIntakeMotorInverted = false;
+    public static final boolean kRightIntakeMotorInverted = true;
+
   }
 
 
   public static final class ClimbConstants {
     public static final int kClimbMotorCanId = 40;
+    public static final boolean isInverted = false;
   }
 
 

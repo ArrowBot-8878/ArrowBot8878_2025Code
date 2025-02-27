@@ -34,6 +34,7 @@ public class ClimbSubsystem extends SubsystemBase {
     // Configure motor parameters
     config.idleMode(IdleMode.kBrake);
     config.smartCurrentLimit(40);
+    config.inverted(ClimbConstants.isInverted);
     
     // Apply configuration to the motor controller
     climbMotor.configure(config, ResetMode.kNoResetSafeParameters, PersistMode.kPersistParameters);

@@ -4,11 +4,15 @@
 
 package frc.robot.subsystems;
 
+import com.revrobotics.spark.SparkBase.PersistMode;
+import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.config.SparkFlexConfig;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants.AlgaeIntakeConstants;
 import frc.robot.Constants.CoralInsertMechanismConstants;
 
 public class CoralInsertMechanism extends SubsystemBase {
@@ -16,6 +20,10 @@ public class CoralInsertMechanism extends SubsystemBase {
   SparkFlex coralInsertMotor;
   public CoralInsertMechanism() {
     coralInsertMotor = new SparkFlex(CoralInsertMechanismConstants.kCoralInsertMotorCanId, MotorType.kBrushless);
+
+    SparkFlexConfig config = new SparkFlexConfig();
+    config.inverted(CoralInsertMechanismConstants.isInverted);
+    coralInsertMotor.configure(config, ResetMode.kNoResetSafeParameters, PersistMode.kPersistParameters);
   }
 
   /**

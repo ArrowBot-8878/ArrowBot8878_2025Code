@@ -5,12 +5,16 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.AbsoluteEncoder;
+import com.revrobotics.spark.SparkBase.PersistMode;
+import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
+import com.revrobotics.spark.config.SparkFlexConfig;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants.AlgaeIntakeConstants;
 import frc.robot.Constants.CoralArmConstants;
 
 public class CoralArmSubsystem extends SubsystemBase {
@@ -36,6 +40,10 @@ public class CoralArmSubsystem extends SubsystemBase {
     pidController = new PIDController(CoralArmConstants.kP, CoralArmConstants.kI, CoralArmConstants.kD);
     pidController.setTolerance(0.05); // Set tolerance to 0.05 rotations
     pidController.enableContinuousInput(0, 360);
+
+    SparkFlexConfig config = new SparkFlexConfig();
+    config.inverted(CoralArmConstants.isInverted);
+    armMotor.configure(config, ResetMode.kNoResetSafeParameters, PersistMode.kPersistParameters);
   }
   
   /**
