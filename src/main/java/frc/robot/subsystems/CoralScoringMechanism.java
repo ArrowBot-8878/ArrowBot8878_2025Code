@@ -9,21 +9,27 @@ import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.SparkFlexConfig;
+import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.AlgaeIntakeConstants;
-import frc.robot.Constants.CoralInsertMechanismConstants;
+import frc.robot.Constants.CoralScoringMechanismConstants;
+import frc.robot.Constants.CoralScoringMechanismConstants;
 
-public class CoralInsertMechanism extends SubsystemBase {
+public class CoralScoringMechanism extends SubsystemBase {
   /** Creates a new CoralMechanism. */
-  SparkFlex coralInsertMotor;
-  public CoralInsertMechanism() {
-    coralInsertMotor = new SparkFlex(CoralInsertMechanismConstants.kCoralInsertMotorCanId, MotorType.kBrushless);
+  SparkMax CoralMotor1;
+  SparkMax CoralMotor2;
+  public CoralScoringMechanism() {
+    CoralMotor1 = new SparkMax(CoralScoringMechanismConstants.kCoralMotor1CanId, MotorType.kBrushless);
+    CoralMotor2 = new SparkMax(CoralScoringMechanismConstants.kCoralMotor2CanId, MotorType.kBrushless);
 
-    SparkFlexConfig config = new SparkFlexConfig();
-    config.inverted(CoralInsertMechanismConstants.isInverted);
-    coralInsertMotor.configure(config, ResetMode.kNoResetSafeParameters, PersistMode.kPersistParameters);
+
+    SparkMaxConfig config = new SparkMaxConfig();
+    config.inverted(CoralScoringMechanismConstants.isInverted);
+    CoralMotor1.configure(config, ResetMode.kNoResetSafeParameters, PersistMode.kPersistParameters);
+    CoralMotor2.configure(config, ResetMode.kNoResetSafeParameters, PersistMode.kPersistParameters);
   }
 
   /**
@@ -31,7 +37,8 @@ public class CoralInsertMechanism extends SubsystemBase {
    * @param speed
    */
   public void setSpeed(double speed) {
-    coralInsertMotor.set(speed);
+    CoralMotor1.set(speed);
+    CoralMotor2.set(speed);
   }
 
   @Override

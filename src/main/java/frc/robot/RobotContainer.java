@@ -13,24 +13,21 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.PS4Controller.Button;
 import frc.robot.Constants.AutoConstants;
-import frc.robot.Constants.CoralInsertMechanismConstants;
+import frc.robot.Constants.CoralScoringMechanismConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.Commands.AlgaeCommands.AlgaeIntakeBiDirectionalCommand;
-import frc.robot.Commands.AlgaeCommands.AlgaeWristClosedLoopCommand;
 import frc.robot.Commands.AlgaeCommands.AlgaeWristOpenLoopCommand;
 import frc.robot.Commands.ClimbCommands.ClimbBiDirectionalCommand;
-import frc.robot.Commands.CoralCommands.CoralArmClosedLoopCommand;
 import frc.robot.Commands.CoralCommands.CoralArmOpenLoopCommand;
 import frc.robot.Commands.CoralCommands.CoralInsertBiDirectionalCommand;
-import frc.robot.Commands.CoralCommands.CoralWristClosedLoopCommand;
 import frc.robot.Commands.CoralCommands.CoralWristOpenLoopCommand;
 import frc.robot.subsystems.AlgaeIntakeSubsystem;
 import frc.robot.subsystems.AlgaeWristSubsystem;
 import frc.robot.subsystems.ClimbSubsystem;
 import frc.robot.subsystems.CoralArmSubsystem;
-import frc.robot.subsystems.CoralInsertMechanism;
+import frc.robot.subsystems.CoralScoringMechanism;
 import frc.robot.subsystems.CoralWristSubsystem;
 import frc.robot.subsystems.DriveSubsystemOld;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -56,7 +53,7 @@ public class RobotContainer {
   private final DriveSubsystemOld m_robotDrive = new DriveSubsystemOld();
   private final CoralWristSubsystem m_coralWristSubsystem = new CoralWristSubsystem();
   private final CoralArmSubsystem m_coralArmSubsystem = new CoralArmSubsystem();
-  private final CoralInsertMechanism m_coralInsertMechanism = new CoralInsertMechanism();
+  private final CoralScoringMechanism m_coralInsertMechanism = new CoralScoringMechanism();
   private final AlgaeWristSubsystem m_algaeWristSubsystem = new AlgaeWristSubsystem();
   private final AlgaeIntakeSubsystem m_algaeIntakeSubsystem = new AlgaeIntakeSubsystem();
   private final ClimbSubsystem m_climbSubsystem = new ClimbSubsystem();
@@ -136,11 +133,11 @@ public class RobotContainer {
     
     // Coral Insert Mechanism Control
     operatorController.a().whileTrue(
-        new CoralInsertBiDirectionalCommand(m_coralInsertMechanism, CoralInsertMechanismConstants.kInsertSpeed)
+        new CoralInsertBiDirectionalCommand(m_coralInsertMechanism, CoralScoringMechanismConstants.kInsertSpeed)
     );
     
     operatorController.b().whileTrue(
-        new CoralInsertBiDirectionalCommand(m_coralInsertMechanism, CoralInsertMechanismConstants.kEjectSpeed)
+        new CoralInsertBiDirectionalCommand(m_coralInsertMechanism, CoralScoringMechanismConstants.kEjectSpeed)
     );
     
     // // Manual override for Coral Wrist

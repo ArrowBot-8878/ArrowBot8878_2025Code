@@ -128,8 +128,9 @@ public final class Constants {
 
 
 
-  public static final class CoralInsertMechanismConstants {
-    public static final int kCoralInsertMotorCanId = 20;
+  public static final class CoralScoringMechanismConstants {
+    public static final int kCoralMotor1CanId = 20;
+    public static final int kCoralMotor2CanId = 21;
     public static final double kInsertSpeed = 0.5;
     public static final double kEjectSpeed = -0.5;
     public static final boolean isInverted = false;
@@ -137,7 +138,7 @@ public final class Constants {
 
 
   public static final class CoralWristConstants {
-    public static final int kCoraWristMotorCanId = 21;
+    public static final int kCoraWristMotorCanId = 22;
     public static final boolean isInverted = false;
     public static final double kP = 0.1;
     public static final double kI = 0.0;
@@ -149,7 +150,7 @@ public final class Constants {
 
 
   public static final class CoralArmConstants {
-    public static final int kCoralArmMotorCanId = 22;
+    public static final int kCoralArmMotorCanId = 23;
     public static final boolean isInverted = false;
     public static final double kP = 0.1;
     public static final double kI = 0.0;
