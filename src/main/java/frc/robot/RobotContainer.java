@@ -11,6 +11,7 @@ import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.PS4Controller.Button;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.CoralScoringMechanismConstants;
@@ -20,9 +21,11 @@ import frc.robot.Constants.OperatorConstants;
 import frc.robot.Commands.AlgaeCommands.AlgaeIntakeBiDirectionalCommand;
 import frc.robot.Commands.AlgaeCommands.AlgaeWristOpenLoopCommand;
 import frc.robot.Commands.ClimbCommands.ClimbBiDirectionalCommand;
+import frc.robot.Commands.CoralCommands.ArmMechGoToPos_CMD;
 import frc.robot.Commands.CoralCommands.CoralArmOpenLoopCommand;
 import frc.robot.Commands.CoralCommands.CoralInsertBiDirectionalCommand;
 import frc.robot.Commands.CoralCommands.CoralWristOpenLoopCommand;
+import frc.robot.Commands.CoralCommands.InAndOutCoral_CMD;
 import frc.robot.subsystems.AlgaeIntakeSubsystem;
 import frc.robot.subsystems.AlgaeWristSubsystem;
 import frc.robot.subsystems.ClimbSubsystem;
@@ -36,9 +39,7 @@ import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-
 import java.util.List;
-
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 
@@ -58,7 +59,7 @@ public class RobotContainer {
   private final AlgaeIntakeSubsystem m_algaeIntakeSubsystem = new AlgaeIntakeSubsystem();
   private final ClimbSubsystem m_climbSubsystem = new ClimbSubsystem();
   
-  SendableChooser<Command> autonChooser = new SendableChooser<Command>();
+  SendableChooser<Command> autonChooser;
 
   // The driver's controller
   XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
@@ -71,8 +72,23 @@ public class RobotContainer {
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
+    
+    //------------------------ AUTO CODE ---------------------
+    //Add named commands here
+    //NamedCommands.registerCommand("DriveToAprilTag", new DriveToAprilTag(drivetrain, stateMachine));
+    NamedCommands.registerCommand("IntakPos", 
+        new ArmMechGoToPos_CMD(m_coralArmSubsystem, m_coralWristSubsystem, Constants.CoralArmConstants.ARM_INTAKE_ANGLE, Constants.CoralWristConstants.WRIST_INTAKE_ANGLE));
+    NamedCommands.registerCommand("L2Pos", 
+        new ArmMechGoToPos_CMD(m_coralArmSubsystem, m_coralWristSubsystem, Constants.CoralArmConstants.ARM_L2_ANGLE, Constants.CoralWristConstants.WRIST_L2_ANGLE));
+    NamedCommands.registerCommand("L3Pos", 
+        new ArmMechGoToPos_CMD(m_coralArmSubsystem, m_coralWristSubsystem, Constants.CoralArmConstants.ARM_L3_ANGLE, Constants.CoralWristConstants.WRIST_L3_ANGLE));
+    NamedCommands.registerCommand("IntakCoral", new InAndOutCoral_CMD(m_coralInsertMechanism, false));
+    NamedCommands.registerCommand("ShootCoral", new InAndOutCoral_CMD(m_coralInsertMechanism, true));
+
+
+    autonChooser = AutoBuilder.buildAutoChooser();
+    SmartDashboard.putData("Auto", autonChooser);
     // Configure the button bindings
-    autonChooser.setDefaultOption("DefaultAuto", AutoBuilder.buildAuto("New Auto"));
     
     configureButtonBindings();
 
@@ -139,6 +155,20 @@ public class RobotContainer {
     operatorController.b().whileTrue(
         new CoralInsertBiDirectionalCommand(m_coralInsertMechanism, CoralScoringMechanismConstants.kEjectSpeed)
     );
+
+    operatorController.rightTrigger(0.2).whileTrue(new InAndOutCoral_CMD(m_coralInsertMechanism, false));
+    operatorController.leftTrigger(0.2).whileTrue(new InAndOutCoral_CMD(m_coralInsertMechanism, true));
+
+    //intake coral position
+    operatorController.povDown().onTrue(
+        new ArmMechGoToPos_CMD(m_coralArmSubsystem, m_coralWristSubsystem, Constants.CoralArmConstants.ARM_INTAKE_ANGLE, Constants.CoralWristConstants.WRIST_INTAKE_ANGLE));
+    //score l2 position
+    operatorController.povRight().onTrue(
+        new ArmMechGoToPos_CMD(m_coralArmSubsystem, m_coralWristSubsystem, Constants.CoralArmConstants.ARM_L2_ANGLE, Constants.CoralWristConstants.WRIST_L2_ANGLE));
+    //score l3 position
+    operatorController.povUp().onTrue(
+        new ArmMechGoToPos_CMD(m_coralArmSubsystem, m_coralWristSubsystem, Constants.CoralArmConstants.ARM_L3_ANGLE, Constants.CoralWristConstants.WRIST_L3_ANGLE));
+
     
     // // Manual override for Coral Wrist
     // operatorController.leftBumper().whileTrue(
@@ -174,6 +204,7 @@ public class RobotContainer {
             () -> -backUpOperator.getRightTriggerAxis()
         )
     );
+
     
     // // Manual override for Algae Wrist
     // backUpOperator.leftBumper().whileTrue(
@@ -206,6 +237,6 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    return new PrintCommand("This is a little non functioning auto. Yipee!");
+    return autonChooser.getSelected();
   }
 }

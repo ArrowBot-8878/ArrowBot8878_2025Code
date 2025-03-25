@@ -104,29 +104,11 @@ public final class Constants {
     public static final double kFreeSpeedRpm = 5676;
   }
 
-
-
-
-
-
   public static final class OperatorConstants {
     public static final int DRIVER_CONTROLLER_PORT = 0;
     public static final int OPERATOR_CONTROLLER_PORT = 1;
     public static final int BACK_UP_OPERATOR_CONTROLLER_PORT = 2;
   }
-
-
-
-
-
-
-
-
-
-
-
-
-
 
   public static final class CoralScoringMechanismConstants {
     public static final int kCoralMotor1CanId = 20;
@@ -136,7 +118,6 @@ public final class Constants {
     public static final boolean isInverted = false;
   }
 
-
   public static final class CoralWristConstants {
     public static final int kCoraWristMotorCanId = 22;
     public static final boolean isInverted = false;
@@ -145,9 +126,10 @@ public final class Constants {
     public static final double kD = 0.0;
     public static final double FORBIDDEN_ZONE_START = 150.0;
     public static final double FORBIDDEN_ZONE_END = 250.0;
+    public static final double WRIST_INTAKE_ANGLE = 200; //FIX ME
+    public static final double WRIST_L2_ANGLE = 200; //FIX ME
+    public static final double WRIST_L3_ANGLE = 200; //FIX ME
   }
-
-
 
   public static final class CoralArmConstants {
     public static final int kCoralArmMotorCanId = 23;
@@ -157,6 +139,9 @@ public final class Constants {
     public static final double kD = 0.0;
     public static final double FORBIDDEN_ZONE_START = 150.0;
     public static final double FORBIDDEN_ZONE_END = 250.0;
+    public static final double ARM_INTAKE_ANGLE = 200; //FIX ME
+    public static final double ARM_L2_ANGLE = 200; //FIX ME
+    public static final double ARM_L3_ANGLE = 200; //FIX ME
   }
 
 
