@@ -9,18 +9,21 @@ import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkFlex;
+import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.config.SparkFlexConfig;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 import frc.robot.Constants.AlgaeIntakeConstants;
 import frc.robot.Constants.CoralWristConstants;
 
 public class CoralWristSubsystem extends SubsystemBase {
   // Motor controller
   private final SparkFlex wristMotor;
+  private final SparkMax wristBore;
   private final AbsoluteEncoder encoder;
   
   // WPILib PID Controller
@@ -34,9 +37,10 @@ public class CoralWristSubsystem extends SubsystemBase {
   public CoralWristSubsystem() {
     // Initialize motor controller
     wristMotor = new SparkFlex(CoralWristConstants.kCoraWristMotorCanId, MotorType.kBrushless);
+    wristBore = new SparkMax(Constants.CoralWristConstants.wristBoreCanId, MotorType.kBrushless);
     
     // Get the encoder from the SparkFlex
-    encoder = wristMotor.getAbsoluteEncoder();
+    encoder = wristBore.getAbsoluteEncoder();
     
     // Create and configure WPILib PID controller
     pidController = new PIDController(CoralWristConstants.kP, CoralWristConstants.kI, CoralWristConstants.kD);

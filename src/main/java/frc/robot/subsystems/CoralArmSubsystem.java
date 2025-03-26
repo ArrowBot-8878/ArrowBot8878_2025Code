@@ -8,6 +8,7 @@ import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkFlex;
+import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.config.SparkFlexConfig;
 
@@ -21,6 +22,7 @@ import frc.robot.Constants.CoralArmConstants;
 public class CoralArmSubsystem extends SubsystemBase {
   // Motor controller
   private final SparkFlex armMotor;
+  private final SparkMax armBore;
   private final AbsoluteEncoder encoder;
   
   // WPILib PID Controller
@@ -33,9 +35,10 @@ public class CoralArmSubsystem extends SubsystemBase {
   public CoralArmSubsystem() {
     // Initialize motor controller
     armMotor = new SparkFlex(CoralArmConstants.kCoralArmMotorCanId, MotorType.kBrushless);
+    armBore = new SparkMax(Constants.CoralArmConstants.armBoreCanId, MotorType.kBrushless);
     
     // Get the encoder from the SparkFlex
-    encoder = armMotor.getAbsoluteEncoder();
+    encoder = armBore.getAbsoluteEncoder();
     
     // Create and configure WPILib PID controller
     pidController = new PIDController(CoralArmConstants.kP, CoralArmConstants.kI, CoralArmConstants.kD);
