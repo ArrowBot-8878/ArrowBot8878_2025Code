@@ -148,26 +148,29 @@ public class RobotContainer {
     // CORAL CONTROLS (OPERATOR CONTROLLER)
     
     // Coral Insert Mechanism Control
-    operatorController.a().whileTrue(
-        new CoralInsertBiDirectionalCommand(m_coralInsertMechanism, CoralScoringMechanismConstants.kInsertSpeed)
-    );
+    // operatorController.a().whileTrue(
+    //     new CoralInsertBiDirectionalCommand(m_coralInsertMechanism, CoralScoringMechanismConstants.kInsertSpeed)
+    // );
     
-    operatorController.b().whileTrue(
-        new CoralInsertBiDirectionalCommand(m_coralInsertMechanism, CoralScoringMechanismConstants.kEjectSpeed)
-    );
+    // operatorController.b().whileTrue(
+    //     new CoralInsertBiDirectionalCommand(m_coralInsertMechanism, CoralScoringMechanismConstants.kEjectSpeed)
+    // );
 
     operatorController.rightTrigger(0.2).whileTrue(new InAndOutCoral_CMD(m_coralInsertMechanism, false));
     operatorController.leftTrigger(0.2).whileTrue(new InAndOutCoral_CMD(m_coralInsertMechanism, true));
 
     //intake coral position
     operatorController.y().onTrue(
-        new ArmMechGoToPos_CMD(m_coralArmSubsystem, m_coralWristSubsystem, Constants.CoralArmConstants.ARM_INTAKE_ANGLE, Constants.CoralWristConstants.WRIST_INTAKE_ANGLE));
+        new ArmMechGoToPos_CMD(m_coralArmSubsystem, m_coralWristSubsystem, Constants.CoralArmConstants.ARM_INTAKE_ANGLE, Constants.CoralWristConstants.WRIST_INTAKE_ANGLE).
+        andThen(new CoralInsertBiDirectionalCommand(m_coralInsertMechanism, CoralScoringMechanismConstants.kInsertSpeed)));
     //score l2 position
     operatorController.a().onTrue(
-        new ArmMechGoToPos_CMD(m_coralArmSubsystem, m_coralWristSubsystem, Constants.CoralArmConstants.ARM_L2_ANGLE, Constants.CoralWristConstants.WRIST_L2_ANGLE));
+        new ArmMechGoToPos_CMD(m_coralArmSubsystem, m_coralWristSubsystem, Constants.CoralArmConstants.ARM_L2_ANGLE, Constants.CoralWristConstants.WRIST_L2_ANGLE).
+        andThen( new CoralInsertBiDirectionalCommand(m_coralInsertMechanism, CoralScoringMechanismConstants.kEjectSpeed)));
     //score l3 position
     operatorController.b().onTrue(
-        new ArmMechGoToPos_CMD(m_coralArmSubsystem, m_coralWristSubsystem, Constants.CoralArmConstants.ARM_L3_ANGLE, Constants.CoralWristConstants.WRIST_L3_ANGLE));
+        new ArmMechGoToPos_CMD(m_coralArmSubsystem, m_coralWristSubsystem, Constants.CoralArmConstants.ARM_L3_ANGLE, Constants.CoralWristConstants.WRIST_L3_ANGLE).
+        andThen( new CoralInsertBiDirectionalCommand(m_coralInsertMechanism, CoralScoringMechanismConstants.kEjectSpeed)));
 
     
     // // Manual override for Coral Wrist
