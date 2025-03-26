@@ -124,11 +124,11 @@ public final class Constants {
     public static final double kP = 0.01;
     public static final double kI = 0.0;
     public static final double kD = 0.0;
-    public static final double FORBIDDEN_ZONE_START = 150.0;
+    public static final double FORBIDDEN_ZONE_START = 20.0;
     public static final double FORBIDDEN_ZONE_END = 250.0;
-    public static final double WRIST_INTAKE_ANGLE = 307; //FIX ME
-    public static final double WRIST_L2_ANGLE = 112; //FIX ME
-    public static final double WRIST_L3_ANGLE = 117; //FIX ME
+    public static final double WRIST_INTAKE_ANGLE = 37; //FIX ME
+    public static final double WRIST_L2_ANGLE = 202; //FIX ME
+    public static final double WRIST_L3_ANGLE = 207; //FIX ME
   }
 
   public static final class CoralArmConstants {
@@ -138,8 +138,8 @@ public final class Constants {
     public static final double kP = 0.01;
     public static final double kI = 0.0;
     public static final double kD = 0.0;
-    public static final double FORBIDDEN_ZONE_START = 150.0;
-    public static final double FORBIDDEN_ZONE_END = 250.0;
+    public static final double FORBIDDEN_ZONE_START = 0.0;
+    public static final double FORBIDDEN_ZONE_END = 150.0;
     public static final double ARM_INTAKE_ANGLE = 142; //FIX ME
     public static final double ARM_L2_ANGLE = 50; //FIX ME
     public static final double ARM_L3_ANGLE = 4; //FIX ME

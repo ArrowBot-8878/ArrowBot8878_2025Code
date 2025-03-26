@@ -43,7 +43,6 @@ public class CoralArmSubsystem extends SubsystemBase {
     // Create and configure WPILib PID controller
     pidController = new PIDController(CoralArmConstants.kP, CoralArmConstants.kI, CoralArmConstants.kD);
     pidController.setTolerance(0.05); // Set tolerance to 0.05 rotations
-    pidController.enableContinuousInput(0, 360);
 
     SparkFlexConfig config = new SparkFlexConfig();
     config.inverted(CoralArmConstants.isInverted);

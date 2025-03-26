@@ -160,13 +160,13 @@ public class RobotContainer {
     operatorController.leftTrigger(0.2).whileTrue(new InAndOutCoral_CMD(m_coralInsertMechanism, true));
 
     //intake coral position
-    operatorController.povDown().onTrue(
+    operatorController.y().onTrue(
         new ArmMechGoToPos_CMD(m_coralArmSubsystem, m_coralWristSubsystem, Constants.CoralArmConstants.ARM_INTAKE_ANGLE, Constants.CoralWristConstants.WRIST_INTAKE_ANGLE));
     //score l2 position
-    operatorController.povRight().onTrue(
+    operatorController.a().onTrue(
         new ArmMechGoToPos_CMD(m_coralArmSubsystem, m_coralWristSubsystem, Constants.CoralArmConstants.ARM_L2_ANGLE, Constants.CoralWristConstants.WRIST_L2_ANGLE));
     //score l3 position
-    operatorController.povUp().onTrue(
+    operatorController.b().onTrue(
         new ArmMechGoToPos_CMD(m_coralArmSubsystem, m_coralWristSubsystem, Constants.CoralArmConstants.ARM_L3_ANGLE, Constants.CoralWristConstants.WRIST_L3_ANGLE));
 
     
