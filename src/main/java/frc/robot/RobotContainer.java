@@ -34,6 +34,7 @@ import frc.robot.subsystems.CoralScoringMechanism;
 import frc.robot.subsystems.CoralWristSubsystem;
 import frc.robot.subsystems.DriveSubsystemOld;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -62,7 +63,7 @@ public class RobotContainer {
 //   SendableChooser<Command> autonChooser;
 
   // The driver's controller
-  XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
+  CommandXboxController m_driverController = new CommandXboxController(OIConstants.kDriverControllerPort);
   private final CommandXboxController operatorController = new CommandXboxController(
       OperatorConstants.OPERATOR_CONTROLLER_PORT);
     private final CommandXboxController backUpOperator = new CommandXboxController(
@@ -98,9 +99,9 @@ public class RobotContainer {
         // Turning is controlled by the X axis of the right stick.
         new RunCommand(
             () -> m_robotDrive.drive(
-                -MathUtil.applyDeadband(m_driverController.getLeftY(), OIConstants.kDriveDeadband),
-                -MathUtil.applyDeadband(m_driverController.getLeftX(), OIConstants.kDriveDeadband),
-                -MathUtil.applyDeadband(m_driverController.getRightX(), OIConstants.kDriveDeadband),
+                MathUtil.applyDeadband(m_driverController.getLeftY(), OIConstants.kDriveDeadband),
+                MathUtil.applyDeadband(m_driverController.getLeftX(), OIConstants.kDriveDeadband),
+                MathUtil.applyDeadband(m_driverController.getRightX(), OIConstants.kDriveDeadband),
                 true),
             m_robotDrive));
     
@@ -140,7 +141,7 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
     // Keep existing button bindings
-    new JoystickButton(m_driverController, Button.kR1.value)
+    m_driverController.rightTrigger()
         .whileTrue(new RunCommand(
             () -> m_robotDrive.setX(),
             m_robotDrive));
@@ -169,7 +170,7 @@ public class RobotContainer {
     operatorController.b().onTrue(
         new ArmMechGoToPos_CMD(m_coralArmSubsystem, m_coralWristSubsystem, Constants.CoralArmConstants.ARM_L3_ANGLE, Constants.CoralWristConstants.WRIST_L3_ANGLE));
 
-    
+    m_driverController.start().onTrue(new InstantCommand(() -> m_robotDrive.zeroHeading()));
     // // Manual override for Coral Wrist
     // operatorController.leftBumper().whileTrue(
     //     new CoralWristOpenLoopCommand(m_coralWristSubsystem, () -> 0.3)

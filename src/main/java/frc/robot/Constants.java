@@ -126,8 +126,8 @@ public final class Constants {
     public static final double kD = 0.0;
     public static final double FORBIDDEN_ZONE_START = 20.0;
     public static final double FORBIDDEN_ZONE_END = 250.0;
-    public static final double WRIST_INTAKE_ANGLE = 37; //FIX ME
-    public static final double WRIST_L2_ANGLE = 202; //FIX ME
+    public static final double WRIST_INTAKE_ANGLE = 37; //FIX ME if > 270 subtract 270, otherwise add 90 to the values. 
+    public static final double WRIST_L2_ANGLE = 202; //FIX ME  This prevents going past 369 which will cause issues.
     public static final double WRIST_L3_ANGLE = 207; //FIX ME
   }
 
