@@ -60,7 +60,7 @@ public class RobotContainer {
   private final AlgaeIntakeSubsystem m_algaeIntakeSubsystem = new AlgaeIntakeSubsystem();
   private final ClimbSubsystem m_climbSubsystem = new ClimbSubsystem();
   
-//   SendableChooser<Command> autonChooser;
+   SendableChooser<Command> autonChooser;
 
   // The driver's controller
   CommandXboxController m_driverController = new CommandXboxController(OIConstants.kDriverControllerPort);
@@ -76,19 +76,18 @@ public class RobotContainer {
     
     //------------------------ AUTO CODE ---------------------
     //Add named commands here
-    //NamedCommands.registerCommand("DriveToAprilTag", new DriveToAprilTag(drivetrain, stateMachine));
-    // NamedCommands.registerCommand("IntakPos", 
-    //     new ArmMechGoToPos_CMD(m_coralArmSubsystem, m_coralWristSubsystem, Constants.CoralArmConstants.ARM_INTAKE_ANGLE, Constants.CoralWristConstants.WRIST_INTAKE_ANGLE));
-    // NamedCommands.registerCommand("L2Pos", 
-    //     new ArmMechGoToPos_CMD(m_coralArmSubsystem, m_coralWristSubsystem, Constants.CoralArmConstants.ARM_L2_ANGLE, Constants.CoralWristConstants.WRIST_L2_ANGLE));
-    // NamedCommands.registerCommand("L3Pos", 
-    //     new ArmMechGoToPos_CMD(m_coralArmSubsystem, m_coralWristSubsystem, Constants.CoralArmConstants.ARM_L3_ANGLE, Constants.CoralWristConstants.WRIST_L3_ANGLE));
-    // NamedCommands.registerCommand("IntakCoral", new InAndOutCoral_CMD(m_coralInsertMechanism, false));
-    // NamedCommands.registerCommand("ShootCoral", new InAndOutCoral_CMD(m_coralInsertMechanism, true));
+    NamedCommands.registerCommand("IntakPos", 
+        new ArmMechGoToPos_CMD(m_coralArmSubsystem, m_coralWristSubsystem, Constants.CoralArmConstants.ARM_INTAKE_ANGLE, Constants.CoralWristConstants.WRIST_INTAKE_ANGLE));
+    NamedCommands.registerCommand("L2Pos", 
+        new ArmMechGoToPos_CMD(m_coralArmSubsystem, m_coralWristSubsystem, Constants.CoralArmConstants.ARM_L2_ANGLE, Constants.CoralWristConstants.WRIST_L2_ANGLE));
+    NamedCommands.registerCommand("L3Pos", 
+        new ArmMechGoToPos_CMD(m_coralArmSubsystem, m_coralWristSubsystem, Constants.CoralArmConstants.ARM_L3_ANGLE, Constants.CoralWristConstants.WRIST_L3_ANGLE));
+    NamedCommands.registerCommand("IntakCoral", new InAndOutCoral_CMD(m_coralInsertMechanism, false));
+    NamedCommands.registerCommand("ShootCoral", new InAndOutCoral_CMD(m_coralInsertMechanism, true));
 
 
-    // autonChooser = AutoBuilder.buildAutoChooser();
-    // SmartDashboard.putData("Auto", autonChooser);
+    autonChooser = AutoBuilder.buildAutoChooser();
+    SmartDashboard.putData("Auto", autonChooser);
     // Configure the button bindings
     
     configureButtonBindings();
@@ -237,7 +236,7 @@ public class RobotContainer {
    *
    * @return the command to run in autonomous
    */
-//   public Command getAutonomousCommand() {
-//     return autonChooser.getSelected();
-//   }
+  public Command getAutonomousCommand() {
+    return autonChooser.getSelected();
+  }
 }
