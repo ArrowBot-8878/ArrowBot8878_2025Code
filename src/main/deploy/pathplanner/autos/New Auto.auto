@@ -13,7 +13,13 @@
         {
           "type": "named",
           "data": {
-            "name": "RunIntake"
+            "name": "L2Pos"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ShootCoral"
           }
         }
       ]
