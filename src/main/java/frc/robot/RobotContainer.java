@@ -221,14 +221,14 @@ public class RobotContainer {
     new Trigger(() -> Math.abs(m_driverController.getRightTriggerAxis()) > 0.1)
         .whileTrue(new ClimbBiDirectionalCommand(
             m_climbSubsystem,
-            () -> m_driverController.getRightTriggerAxis() * 0.7 // Scale to 70% max speed
+            () -> m_driverController.getRightTriggerAxis() * 0.85 // Scale to 70% max speed
         ));
     
-    new Trigger(() -> Math.abs(m_driverController.getLeftTriggerAxis()) > 0.1)
-        .whileTrue(new ClimbBiDirectionalCommand(
-            m_climbSubsystem,
-            () -> -m_driverController.getLeftTriggerAxis() * 0.7 // Scale to 70% max speed
-        ));
+    // new Trigger(() -> Math.abs(m_driverController.getLeftTriggerAxis()) > 0.1)
+    //     .whileTrue(new ClimbBiDirectionalCommand(
+    //         m_climbSubsystem,
+    //         () -> -m_driverController.getLeftTriggerAxis() * 0.7 // Scale to 70% max speed
+    //     ));
   }
 
   /**
