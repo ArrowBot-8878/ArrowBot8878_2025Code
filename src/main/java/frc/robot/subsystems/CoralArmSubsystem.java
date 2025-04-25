@@ -48,6 +48,7 @@ public class CoralArmSubsystem extends SubsystemBase {
     config.inverted(CoralArmConstants.isInverted);
     armMotor.configure(config, ResetMode.kNoResetSafeParameters, PersistMode.kPersistParameters);
     setpoint = getAngleDegrees();
+    setPosition(setpoint);
 
   }
   
@@ -57,21 +58,6 @@ public class CoralArmSubsystem extends SubsystemBase {
    */
   public double getAngleDegrees() {
     return encoder.getPosition();
-  }
-
-  /**
-   * Gets the current position of the arm
-   * @return Current position in rotations
-   */
-  public double getPosition() {
-    if(encoder.getPosition() > 270)
-    {
-      return encoder.getPosition() - 270;
-    }
-    else
-    {
-      return encoder.getPosition() + 90;
-    }
   }
 
   /**

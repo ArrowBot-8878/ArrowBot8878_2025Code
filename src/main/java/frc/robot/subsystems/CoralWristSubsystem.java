@@ -51,6 +51,7 @@ public class CoralWristSubsystem extends SubsystemBase {
     config.inverted(CoralWristConstants.isInverted);
     wristMotor.configure(config, ResetMode.kNoResetSafeParameters, PersistMode.kPersistParameters);
     setpoint = getAngleDegrees();
+    setPosition(setpoint);
 
   }
   
@@ -143,7 +144,8 @@ public ControlMode getControlMode() {
 }
 
 @Override
-public void periodic() {
+public void periodic() 
+{
     // This method will be called once per scheduler run
     double currentAngle = getAngleDegrees();
     double pidOutput = 0.0;
