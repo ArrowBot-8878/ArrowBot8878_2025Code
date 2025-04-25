@@ -125,10 +125,10 @@ public final class Constants {
     public static final double kI = 0.0;
     public static final double kD = 0.0;
     public static final double FORBIDDEN_ZONE_START = 20.0;
-    public static final double FORBIDDEN_ZONE_END = 250.0;
-    public static final double WRIST_INTAKE_ANGLE = 37; //FIX ME if > 270 subtract 270, otherwise add 90 to the values. 
-    public static final double WRIST_L2_ANGLE = 202; //FIX ME  This prevents going past 369 which will cause issues.
-    public static final double WRIST_L3_ANGLE = 207; //FIX ME
+    public static final double FORBIDDEN_ZONE_END = 330.0;
+    public static final double WRIST_INTAKE_ANGLE = 16; //FIX ME if > 270 subtract 270, otherwise add 90 to the values. 
+    public static final double WRIST_L2_ANGLE = 135; //FIX ME  This prevents going past 369 which will cause issues.
+    public static final double WRIST_L3_ANGLE = 169; //FIX ME
   }
 
   public static final class CoralArmConstants {
@@ -139,10 +139,10 @@ public final class Constants {
     public static final double kI = 0.0;
     public static final double kD = 0.0;
     public static final double FORBIDDEN_ZONE_START = 0.0;
-    public static final double FORBIDDEN_ZONE_END = 150.0;
-    public static final double ARM_INTAKE_ANGLE = 142; //FIX ME
-    public static final double ARM_L2_ANGLE = 50; //FIX ME
-    public static final double ARM_L3_ANGLE = 4; //FIX ME
+    public static final double FORBIDDEN_ZONE_END = 250.0;
+    public static final double ARM_INTAKE_ANGLE = 160; //FIX ME
+    public static final double ARM_L2_ANGLE = 100; //FIX ME
+    public static final double ARM_L3_ANGLE = 37; //FIX ME
   }
 
 

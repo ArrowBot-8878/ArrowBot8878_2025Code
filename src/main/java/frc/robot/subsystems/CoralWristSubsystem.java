@@ -50,6 +50,8 @@ public class CoralWristSubsystem extends SubsystemBase {
     SparkFlexConfig config = new SparkFlexConfig();
     config.inverted(CoralWristConstants.isInverted);
     wristMotor.configure(config, ResetMode.kNoResetSafeParameters, PersistMode.kPersistParameters);
+    setpoint = getAngleDegrees();
+
   }
   
   /**
@@ -57,7 +59,14 @@ public class CoralWristSubsystem extends SubsystemBase {
    * @return Current position in rotations
    */
   public double getAngleDegrees() {
-    return encoder.getPosition();
+    if(encoder.getPosition() > 270)
+    {
+      return encoder.getPosition() - 270;
+    }
+    else
+    {
+      return encoder.getPosition() + 90;
+    }
   }
 
   /**
@@ -66,7 +75,7 @@ public class CoralWristSubsystem extends SubsystemBase {
    * @return true if the angle is in the forbidden zone, false otherwise
    */
   private boolean isInForbiddenZone(double angleDegrees) {
-    return angleDegrees >= CoralWristConstants.FORBIDDEN_ZONE_START && angleDegrees <= CoralWristConstants.FORBIDDEN_ZONE_END;
+    return angleDegrees <= CoralWristConstants.FORBIDDEN_ZONE_START && angleDegrees >= CoralWristConstants.FORBIDDEN_ZONE_END;
   }
 
   private boolean isMovingIntoForbiddenZone(double speed) {
@@ -100,7 +109,7 @@ public class CoralWristSubsystem extends SubsystemBase {
   }
 
   // Current control mode
-  private ControlMode currentMode = ControlMode.OPEN_LOOP;
+  private ControlMode currentMode = ControlMode.CLOSED_LOOP;
   // Last commanded speed for open loop
   private double lastCommandedSpeed = 0.0;
 

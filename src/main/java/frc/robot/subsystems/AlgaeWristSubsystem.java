@@ -32,7 +32,6 @@ public class AlgaeWristSubsystem extends SubsystemBase {
   public AlgaeWristSubsystem() {
     // Initialize motor controller
     wristMotor = new SparkFlex(AlgaeWristConstants.kAlgaeWristMotorCanId, MotorType.kBrushless);
-    
     // Get the encoder from the SparkFlex
     encoder = wristMotor.getAbsoluteEncoder();
 
@@ -42,6 +41,8 @@ public class AlgaeWristSubsystem extends SubsystemBase {
     SparkFlexConfig config = new SparkFlexConfig();
     config.inverted(AlgaeWristConstants.isInverted);
     wristMotor.configure(config, ResetMode.kNoResetSafeParameters, PersistMode.kPersistParameters);
+    setpoint = getAngleDegrees();
+
   }
   
   /**
@@ -49,14 +50,8 @@ public class AlgaeWristSubsystem extends SubsystemBase {
    * @return Current position in degrees
    */
   public double getAngleDegrees() {
-    if(encoder.getPosition() > 270)
-    {
-      return encoder.getPosition() - 270;
-    }
-    else
-    {
-      return encoder.getPosition() + 90;
-    }
+    return encoder.getPosition();
+
   }
 
   /**

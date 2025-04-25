@@ -36,7 +36,7 @@ public class CoralArmSubsystem extends SubsystemBase {
     // Initialize motor controller
     armMotor = new SparkFlex(CoralArmConstants.kCoralArmMotorCanId, MotorType.kBrushless);
     armBore = new SparkMax(Constants.CoralArmConstants.armBoreCanId, MotorType.kBrushless);
-    
+
     // Get the encoder from the SparkFlex
     encoder = armBore.getAbsoluteEncoder();
     
@@ -47,6 +47,8 @@ public class CoralArmSubsystem extends SubsystemBase {
     SparkFlexConfig config = new SparkFlexConfig();
     config.inverted(CoralArmConstants.isInverted);
     armMotor.configure(config, ResetMode.kNoResetSafeParameters, PersistMode.kPersistParameters);
+    setpoint = getAngleDegrees();
+
   }
   
   /**
@@ -62,7 +64,14 @@ public class CoralArmSubsystem extends SubsystemBase {
    * @return Current position in rotations
    */
   public double getPosition() {
-    return encoder.getPosition();
+    if(encoder.getPosition() > 270)
+    {
+      return encoder.getPosition() - 270;
+    }
+    else
+    {
+      return encoder.getPosition() + 90;
+    }
   }
 
   /**
@@ -71,7 +80,7 @@ public class CoralArmSubsystem extends SubsystemBase {
    * @return true if the angle is in the forbidden zone, false otherwise
    */
   private boolean isInForbiddenZone(double angleDegrees) {
-    return angleDegrees >= CoralArmConstants.FORBIDDEN_ZONE_START && angleDegrees <= CoralArmConstants.FORBIDDEN_ZONE_END;
+    return angleDegrees <= CoralArmConstants.FORBIDDEN_ZONE_START && angleDegrees >= CoralArmConstants.FORBIDDEN_ZONE_END;
   }
 
   /**
@@ -110,7 +119,7 @@ public class CoralArmSubsystem extends SubsystemBase {
   }
 
   // Current control mode
-  private ControlMode currentMode = ControlMode.OPEN_LOOP;
+  private ControlMode currentMode = ControlMode.CLOSED_LOOP;
   // Last commanded speed for open loop
   private double lastCommandedSpeed = 0.0;
 

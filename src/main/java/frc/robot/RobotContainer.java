@@ -148,13 +148,13 @@ public class RobotContainer {
     // CORAL CONTROLS (OPERATOR CONTROLLER)
     
     // Coral Insert Mechanism Control
-    operatorController.a().whileTrue(
-        new CoralInsertBiDirectionalCommand(m_coralInsertMechanism, CoralScoringMechanismConstants.kInsertSpeed)
-    );
+    // operatorController.a().whileTrue(
+    //     new CoralInsertBiDirectionalCommand(m_coralInsertMechanism, CoralScoringMechanismConstants.kInsertSpeed)
+    // );
     
-    operatorController.b().whileTrue(
-        new CoralInsertBiDirectionalCommand(m_coralInsertMechanism, CoralScoringMechanismConstants.kEjectSpeed)
-    );
+    // operatorController.b().whileTrue(
+    //     new CoralInsertBiDirectionalCommand(m_coralInsertMechanism, CoralScoringMechanismConstants.kEjectSpeed)
+    // );
 
     operatorController.rightTrigger(0.2).whileTrue(new InAndOutCoral_CMD(m_coralInsertMechanism, false));
     operatorController.leftTrigger(0.2).whileTrue(new InAndOutCoral_CMD(m_coralInsertMechanism, true));
