@@ -104,66 +104,52 @@ public final class Constants {
     public static final double kFreeSpeedRpm = 5676;
   }
 
-
-
-
-
-
   public static final class OperatorConstants {
     public static final int DRIVER_CONTROLLER_PORT = 0;
     public static final int OPERATOR_CONTROLLER_PORT = 1;
     public static final int BACK_UP_OPERATOR_CONTROLLER_PORT = 2;
   }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
   public static final class CoralScoringMechanismConstants {
-    public static final int kCoralMotor1CanId = 20;
-    public static final int kCoralMotor2CanId = 21;
-    public static final double kInsertSpeed = 0.5;
-    public static final double kEjectSpeed = -0.5;
+    public static final int kCoralMotor1CanId = 50;
+    public static final double kInsertSpeed = 0.2;
+    public static final double kEjectSpeed = -0.2;
     public static final boolean isInverted = false;
   }
-
 
   public static final class CoralWristConstants {
     public static final int kCoraWristMotorCanId = 22;
+    public static final int wristBoreCanId = 20;
     public static final boolean isInverted = false;
-    public static final double kP = 0.1;
+    public static final double kP = 0.01;
     public static final double kI = 0.0;
     public static final double kD = 0.0;
-    public static final double FORBIDDEN_ZONE_START = 150.0;
-    public static final double FORBIDDEN_ZONE_END = 250.0;
+    public static final double FORBIDDEN_ZONE_START = 20.0;
+    public static final double FORBIDDEN_ZONE_END = 330.0;
+    public static final double WRIST_INTAKE_ANGLE = 16; //FIX ME if > 270 subtract 270, otherwise add 90 to the values. 
+    public static final double WRIST_L2_ANGLE = 135; //FIX ME  This prevents going past 369 which will cause issues.
+    public static final double WRIST_L3_ANGLE = 169; //FIX ME
   }
-
-
 
   public static final class CoralArmConstants {
     public static final int kCoralArmMotorCanId = 23;
+    public static final int armBoreCanId = 21;
     public static final boolean isInverted = false;
-    public static final double kP = 0.1;
+    public static final double kP = 0.01;
     public static final double kI = 0.0;
     public static final double kD = 0.0;
-    public static final double FORBIDDEN_ZONE_START = 150.0;
+    public static final double FORBIDDEN_ZONE_START = 0.0;
     public static final double FORBIDDEN_ZONE_END = 250.0;
+    public static final double ARM_INTAKE_ANGLE = 160; //FIX ME
+    public static final double ARM_L2_ANGLE = 100; //FIX ME
+    public static final double ARM_L3_ANGLE = 37; //FIX ME
   }
 
 
   public static final class AlgaeWristConstants {
     public static final int kAlgaeWristMotorCanId = 30;
     public static final boolean isInverted = false;
-    public static final double kP = 0.1;
+    public static final double kP = 0.01;
     public static final double kI = 0.0;
     public static final double kD = 0.0;
     public static final double FORBIDDEN_ZONE_START = 5.0;

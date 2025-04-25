@@ -23,13 +23,9 @@ public class CoralScoringMechanism extends SubsystemBase {
   SparkMax CoralMotor2;
   public CoralScoringMechanism() {
     CoralMotor1 = new SparkMax(CoralScoringMechanismConstants.kCoralMotor1CanId, MotorType.kBrushless);
-    CoralMotor2 = new SparkMax(CoralScoringMechanismConstants.kCoralMotor2CanId, MotorType.kBrushless);
-
 
     SparkMaxConfig config = new SparkMaxConfig();
-    config.inverted(CoralScoringMechanismConstants.isInverted);
     CoralMotor1.configure(config, ResetMode.kNoResetSafeParameters, PersistMode.kPersistParameters);
-    CoralMotor2.configure(config, ResetMode.kNoResetSafeParameters, PersistMode.kPersistParameters);
   }
 
   /**
@@ -38,7 +34,7 @@ public class CoralScoringMechanism extends SubsystemBase {
    */
   public void setSpeed(double speed) {
     CoralMotor1.set(speed);
-    CoralMotor2.set(speed);
+    //CoralMotor2.set(speed);
   }
 
   @Override

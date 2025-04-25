@@ -9,18 +9,21 @@ import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkFlex;
+import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.config.SparkFlexConfig;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 import frc.robot.Constants.AlgaeIntakeConstants;
 import frc.robot.Constants.CoralWristConstants;
 
 public class CoralWristSubsystem extends SubsystemBase {
   // Motor controller
   private final SparkFlex wristMotor;
+  private final SparkMax wristBore;
   private final AbsoluteEncoder encoder;
   
   // WPILib PID Controller
@@ -34,9 +37,10 @@ public class CoralWristSubsystem extends SubsystemBase {
   public CoralWristSubsystem() {
     // Initialize motor controller
     wristMotor = new SparkFlex(CoralWristConstants.kCoraWristMotorCanId, MotorType.kBrushless);
+    wristBore = new SparkMax(Constants.CoralWristConstants.wristBoreCanId, MotorType.kBrushless);
     
     // Get the encoder from the SparkFlex
-    encoder = wristMotor.getAbsoluteEncoder();
+    encoder = wristBore.getAbsoluteEncoder();
     
     // Create and configure WPILib PID controller
     pidController = new PIDController(CoralWristConstants.kP, CoralWristConstants.kI, CoralWristConstants.kD);
@@ -46,6 +50,9 @@ public class CoralWristSubsystem extends SubsystemBase {
     SparkFlexConfig config = new SparkFlexConfig();
     config.inverted(CoralWristConstants.isInverted);
     wristMotor.configure(config, ResetMode.kNoResetSafeParameters, PersistMode.kPersistParameters);
+    setpoint = getAngleDegrees();
+    setPosition(setpoint);
+
   }
   
   /**
@@ -53,7 +60,14 @@ public class CoralWristSubsystem extends SubsystemBase {
    * @return Current position in rotations
    */
   public double getAngleDegrees() {
-    return encoder.getPosition();
+    if(encoder.getPosition() > 270)
+    {
+      return encoder.getPosition() - 270;
+    }
+    else
+    {
+      return encoder.getPosition() + 90;
+    }
   }
 
   /**
@@ -62,7 +76,7 @@ public class CoralWristSubsystem extends SubsystemBase {
    * @return true if the angle is in the forbidden zone, false otherwise
    */
   private boolean isInForbiddenZone(double angleDegrees) {
-    return angleDegrees >= CoralWristConstants.FORBIDDEN_ZONE_START && angleDegrees <= CoralWristConstants.FORBIDDEN_ZONE_END;
+    return angleDegrees <= CoralWristConstants.FORBIDDEN_ZONE_START && angleDegrees >= CoralWristConstants.FORBIDDEN_ZONE_END;
   }
 
   private boolean isMovingIntoForbiddenZone(double speed) {
@@ -96,7 +110,7 @@ public class CoralWristSubsystem extends SubsystemBase {
   }
 
   // Current control mode
-  private ControlMode currentMode = ControlMode.OPEN_LOOP;
+  private ControlMode currentMode = ControlMode.CLOSED_LOOP;
   // Last commanded speed for open loop
   private double lastCommandedSpeed = 0.0;
 
@@ -130,7 +144,8 @@ public ControlMode getControlMode() {
 }
 
 @Override
-public void periodic() {
+public void periodic() 
+{
     // This method will be called once per scheduler run
     double currentAngle = getAngleDegrees();
     double pidOutput = 0.0;
