@@ -181,6 +181,7 @@ public final class Constants {
 
   public static final class ClimbConstants {
     public static final int kClimbMotorCanId = 40;
+    public static final int kRatchetMotorCanId = 75;
     public static final boolean isInverted = false;
   }
 

@@ -19,6 +19,7 @@ import frc.robot.Constants.ClimbConstants;
 public class ClimbSubsystem extends SubsystemBase {
   // Motor controller
   private final SparkFlex climbMotor;
+  private final SparkFlex ratchetMotor;
   
   // Current commanded speed
   private double currentSpeed = 0.0;
@@ -27,7 +28,8 @@ public class ClimbSubsystem extends SubsystemBase {
   public ClimbSubsystem() {
      // Initialize motor controller
     climbMotor = new SparkFlex(ClimbConstants.kClimbMotorCanId, MotorType.kBrushless);
-    
+    ratchetMotor = new SparkFlex(ClimbConstants.kRatchetMotorCanId, MotorType.kBrushless);
+
     // Create configuration object
     SparkFlexConfig config = new SparkFlexConfig();
     
@@ -38,6 +40,8 @@ public class ClimbSubsystem extends SubsystemBase {
     
     // Apply configuration to the motor controller
     climbMotor.configure(config, ResetMode.kNoResetSafeParameters, PersistMode.kPersistParameters);
+    ratchetMotor.configure(config, ResetMode.kNoResetSafeParameters, PersistMode.kPersistParameters);
+
   }
   
   /**
@@ -50,6 +54,7 @@ public class ClimbSubsystem extends SubsystemBase {
     
     currentSpeed = speed;
     climbMotor.set(speed);
+    ratchetMotor.set(speed);
   }
   
   /**
