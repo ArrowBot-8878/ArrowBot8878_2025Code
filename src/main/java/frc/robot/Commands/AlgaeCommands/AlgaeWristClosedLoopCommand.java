@@ -46,6 +46,13 @@ public class AlgaeWristClosedLoopCommand extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    if (wristSubsystem.atSetpoint())
+    {
+      return true;
+    }
+    else
+    {
+      return false;
+    }
   }
 }

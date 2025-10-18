@@ -32,18 +32,17 @@ public class AlgaeWristSubsystem extends SubsystemBase {
   public AlgaeWristSubsystem() {
     // Initialize motor controller
     wristMotor = new SparkFlex(AlgaeWristConstants.kAlgaeWristMotorCanId, MotorType.kBrushless);
-    
     // Get the encoder from the SparkFlex
     encoder = wristMotor.getAbsoluteEncoder();
-    
+
     // Create and configure WPILib PID controller
     pidController = new PIDController(AlgaeWristConstants.kP, AlgaeWristConstants.kI, AlgaeWristConstants.kD);
-    pidController.setTolerance(0.05); // Set tolerance to 0.05 rotations
-    pidController.enableContinuousInput(0, 360);
-
+    pidController.setTolerance(.5);
     SparkFlexConfig config = new SparkFlexConfig();
     config.inverted(AlgaeWristConstants.isInverted);
     wristMotor.configure(config, ResetMode.kNoResetSafeParameters, PersistMode.kPersistParameters);
+    setpoint = getAngleDegrees();
+
   }
   
   /**
@@ -52,14 +51,7 @@ public class AlgaeWristSubsystem extends SubsystemBase {
    */
   public double getAngleDegrees() {
     return encoder.getPosition();
-  }
 
-  /**
-   * Gets the current position of the wrist
-   * @return Current position in rotations
-   */
-  public double getPosition() {
-    return encoder.getPosition();
   }
 
   /**
@@ -92,14 +84,13 @@ public class AlgaeWristSubsystem extends SubsystemBase {
     return false;
   }
 
-  /**
+/**
    * Checks if the wrist is at the target position
    * @return True if at setpoint
    */
   public boolean atSetpoint() {
     return pidController.atSetpoint();
   }
-
   // Control mode enum
   public enum ControlMode {
     OPEN_LOOP,

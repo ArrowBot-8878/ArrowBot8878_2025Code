@@ -1,0 +1,91 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "RightStart"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Right 1"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "IntakPos"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "IntakCoral"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Right 2"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "L2Pos"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "L2Pos"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "R3"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "IntakPos"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "IntakCoral"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Right 2"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "L2Pos"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ShootCoral"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": null,
+  "choreoAuto": false
+}

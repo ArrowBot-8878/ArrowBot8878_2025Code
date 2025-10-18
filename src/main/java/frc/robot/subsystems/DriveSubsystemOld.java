@@ -4,6 +4,10 @@
 
 package frc.robot.subsystems;
 
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.config.PIDConstants;
+import com.pathplanner.lib.config.RobotConfig;
+import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import com.studica.frc.AHRS;
 import com.studica.frc.AHRS.NavXComType;
 
@@ -19,6 +23,7 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.ADIS16470_IMU;
 import edu.wpi.first.wpilibj.ADIS16470_IMU.IMUAxis;
+import edu.wpi.first.wpilibj.DriverStation;
 import frc.robot.Constants.DriveConstants;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -28,6 +33,8 @@ public class DriveSubsystemOld extends SubsystemBase {
       DriveConstants.kFrontLeftDrivingCanId,
       DriveConstants.kFrontLeftTurningCanId,
       DriveConstants.kFrontLeftChassisAngularOffset);
+  
+      private RobotConfig config;
 
   private final MAXSwerveModule m_frontRight = new MAXSwerveModule(
       DriveConstants.kFrontRightDrivingCanId,
@@ -63,6 +70,8 @@ public class DriveSubsystemOld extends SubsystemBase {
   public DriveSubsystemOld() {
     // Usage reporting for MAXSwerve template
     HAL.report(tResourceType.kResourceType_RobotDrive, tInstances.kRobotDriveSwerve_MaxSwerve);
+    // Configure AutoBuilder last
+    configureAutoBuilder();
   }
 
   @Override
@@ -193,5 +202,59 @@ public class DriveSubsystemOld extends SubsystemBase {
    */
   public double getTurnRate() {
     return -m_gyro.getRate();
+  }
+
+  public ChassisSpeeds getRobotRelativeSpeeds()
+  {
+    return DriveConstants.kDriveKinematics.toChassisSpeeds(getModuleStates());
+  }
+
+  public SwerveModuleState[] getModuleStates() {
+    SwerveModuleState[] moduleStates = new SwerveModuleState[4];
+    moduleStates[0] = m_frontLeft.getState();
+    moduleStates[1] = m_frontRight.getState();
+    moduleStates[2] = m_rearLeft.getState();
+    moduleStates[3] = m_rearRight.getState();
+    return moduleStates;
+  }
+
+  private void configureAutoBuilder() {
+    try {
+      config = RobotConfig.fromGUISettings();
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+
+    AutoBuilder.configure(
+    this::getPose, 
+    this::resetOdometry,
+    this::getRobotRelativeSpeeds,
+    (speeds, feedorwards) -> {
+      driveRobotRelative(speeds);
+    },
+    new PPHolonomicDriveController(
+      new PIDConstants(5, 0.0, 0.0), 
+      new PIDConstants(5, 0.0, 0.0)
+    ),
+    config,
+    () -> {
+      var alliance = DriverStation.getAlliance();
+      if (alliance.isPresent()) {
+        return alliance.get() == DriverStation.Alliance.Red;
+      }
+      return false;
+    },
+    this);
+  }
+  public void driveRobotRelative(ChassisSpeeds chassisSpeeds)
+  {
+    // chassisSpeeds = ChassisSpeeds.discretize(chassisSpeeds, 0.02);
+    var swerveModuleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(chassisSpeeds);
+    SwerveDriveKinematics.desaturateWheelSpeeds(
+        swerveModuleStates, DriveConstants.kMaxSpeedMetersPerSecond);
+    m_frontLeft.setDesiredState(swerveModuleStates[0]);
+    m_frontRight.setDesiredState(swerveModuleStates[1]);
+    m_rearLeft.setDesiredState(swerveModuleStates[2]);
+    m_rearRight.setDesiredState(swerveModuleStates[3]);
   }
 }

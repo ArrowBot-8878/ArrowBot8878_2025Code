@@ -8,18 +8,21 @@ import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkFlex;
+import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.config.SparkFlexConfig;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 import frc.robot.Constants.AlgaeIntakeConstants;
 import frc.robot.Constants.CoralArmConstants;
 
 public class CoralArmSubsystem extends SubsystemBase {
   // Motor controller
   private final SparkFlex armMotor;
+  private final SparkMax armBore;
   private final AbsoluteEncoder encoder;
   
   // WPILib PID Controller
@@ -32,18 +35,21 @@ public class CoralArmSubsystem extends SubsystemBase {
   public CoralArmSubsystem() {
     // Initialize motor controller
     armMotor = new SparkFlex(CoralArmConstants.kCoralArmMotorCanId, MotorType.kBrushless);
-    
+    armBore = new SparkMax(Constants.CoralArmConstants.armBoreCanId, MotorType.kBrushless);
+
     // Get the encoder from the SparkFlex
-    encoder = armMotor.getAbsoluteEncoder();
+    encoder = armBore.getAbsoluteEncoder();
     
     // Create and configure WPILib PID controller
     pidController = new PIDController(CoralArmConstants.kP, CoralArmConstants.kI, CoralArmConstants.kD);
     pidController.setTolerance(0.05); // Set tolerance to 0.05 rotations
-    pidController.enableContinuousInput(0, 360);
 
     SparkFlexConfig config = new SparkFlexConfig();
     config.inverted(CoralArmConstants.isInverted);
     armMotor.configure(config, ResetMode.kNoResetSafeParameters, PersistMode.kPersistParameters);
+    setpoint = getAngleDegrees();
+    setPosition(setpoint);
+
   }
   
   /**
@@ -55,20 +61,12 @@ public class CoralArmSubsystem extends SubsystemBase {
   }
 
   /**
-   * Gets the current position of the arm
-   * @return Current position in rotations
-   */
-  public double getPosition() {
-    return encoder.getPosition();
-  }
-
-  /**
    * Checks if the given angle would enter the forbidden zone
    * @param angleDegrees The angle to check in degrees
    * @return true if the angle is in the forbidden zone, false otherwise
    */
   private boolean isInForbiddenZone(double angleDegrees) {
-    return angleDegrees >= CoralArmConstants.FORBIDDEN_ZONE_START && angleDegrees <= CoralArmConstants.FORBIDDEN_ZONE_END;
+    return angleDegrees <= CoralArmConstants.FORBIDDEN_ZONE_START && angleDegrees >= CoralArmConstants.FORBIDDEN_ZONE_END;
   }
 
   /**
@@ -107,7 +105,7 @@ public class CoralArmSubsystem extends SubsystemBase {
   }
 
   // Current control mode
-  private ControlMode currentMode = ControlMode.OPEN_LOOP;
+  private ControlMode currentMode = ControlMode.CLOSED_LOOP;
   // Last commanded speed for open loop
   private double lastCommandedSpeed = 0.0;
 
